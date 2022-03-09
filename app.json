@@ -7,6 +7,16 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#000000",
+      "resizeMode": "cover"
+    },
+    "icon": "./assets/icon.png",
+
+    "android": {
+      "package": "com.appc.Go_finance"
+    }
   }
 }
