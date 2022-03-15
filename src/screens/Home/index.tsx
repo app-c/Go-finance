@@ -91,20 +91,12 @@ export function Home() {
    const Load = useCallback(() => {
       const a = 160550.5;
       async function load() {
-         const entriesTotal = 0;
-         const exensiveTotal = 0;
          const response = await Storage.getItem(dataKey);
 
          const transacton = response ? JSON.parse(response) : [];
 
          const formatedd: DataLIstProps[] = transacton
             .map((h: DataLIstProps) => {
-               // if (h.type === "positivo") {
-               //    entriesTotal += Number(h.amount);
-               // } else {
-               //    exensiveTotal += Number(h.amount);
-               // }
-
                const amount = Number(h.amount).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
@@ -141,7 +133,6 @@ export function Home() {
 
          const EntriesTotal = formatedd
             .filter((h) => {
-               console.log(h.amount);
                return h.type === "positivo";
             })
             .reduce((acc, item) => {
@@ -150,7 +141,6 @@ export function Home() {
 
          const ExpensiveTotal = formatedd
             .filter((h) => {
-               console.log(h.amount);
                return h.type === "negativo";
             })
             .reduce((acc, item) => {

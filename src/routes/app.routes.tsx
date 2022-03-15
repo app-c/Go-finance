@@ -8,6 +8,7 @@ import { useTheme } from "styled-components";
 
 import { Home } from "../screens/Home";
 import { Register } from "../screens/Register";
+import { Resumo } from "../screens/Resumo";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +18,7 @@ export function AppRoutes() {
       <Tab.Navigator
          tabBarOptions={{
             activeTintColor: theme.colors.shape,
-            inactiveTintColor: theme.colors.secondary,
+            inactiveTintColor: theme.colors.secondary_light,
             style: {
                height: 60,
                paddingBottom: 10,
@@ -53,8 +54,8 @@ export function AppRoutes() {
             }}
          />
          <Tab.Screen
-            name="Listar"
-            component={Register}
+            name="Resumo"
+            component={Resumo}
             options={{
                tabBarIcon: ({ size, color }) => (
                   <MaterialIcons name="pie-chart" size={size} color={color} />
