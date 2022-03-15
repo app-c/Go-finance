@@ -16,9 +16,14 @@ export function AppRoutes() {
    return (
       <Tab.Navigator
          tabBarOptions={{
-            activeTintColor: theme.colors.secondary,
-            inactiveTintColor: theme.colors.text,
-            style: { height: 88, paddingVertical: 0 },
+            activeTintColor: theme.colors.shape,
+            inactiveTintColor: theme.colors.secondary,
+            style: {
+               height: 60,
+               paddingBottom: 10,
+               paddingVertical: 10,
+               backgroundColor: theme.colors.primary,
+            },
          }}
       >
          <Tab.Screen

@@ -38,7 +38,7 @@ export const UserWrapper = styled.View`
    margin-top: ${RFValue(40)}px;
 `;
 
-export const UserInfo = styled.View`
+export const UserInfo = styled.TouchableOpacity`
    flex-direction: row;
    align-items: center;
 `;
@@ -61,6 +61,7 @@ export const UserGreeting = styled.Text`
 
 export const UserName = styled.Text`
    font-size: ${RFValue(16)}px;
+   color: ${theme.colors.shape};
 `;
 
 export const Icon = styled(Feather)`
@@ -81,7 +82,7 @@ export const HighlightCards = styled.ScrollView.attrs({
 export const Transaction = styled.View`
    flex: 1;
    padding: 0 24px;
-   margin-top: ${RFPercentage(12)}px;
+   margin-top: ${RFValue(50)}px;
 `;
 
 export const Title = styled.Text`
@@ -106,12 +107,17 @@ export const FiltroDataContainer = styled.View`
    flex-direction: row;
    align-items: center;
    justify-content: space-between;
-   margin-top: 16px;
+   margin-top: 8px;
 `;
 
 export const ElementosFiltroContainer = styled.TouchableOpacity<PropsElements>`
-   padding: 3px 10px;
+   padding: 2px 15px;
    border-radius: 5px;
    background-color: ${({ select }) =>
       select ? theme.colors.primary : theme.colors.primary_light};
+`;
+
+export const TitleElementosFiltro = styled.Text`
+   font-size: 16px;
+   color: ${({ theme: h }) => h.colors.shape};
 `;

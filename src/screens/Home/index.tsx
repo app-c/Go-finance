@@ -1,13 +1,19 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable import/prefer-default-export */
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { ActivityIndicator } from "react-native";
 
+import AppLoading from "expo-app-loading";
+import * as ImagePiker from "expo-image-picker";
+
 import Storage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { HighlightCard } from "../../components/HighighCard";
+import { Loading } from "../../components/Loading";
 import {
    TransactionCards,
    TransactionCardsProps,
@@ -22,6 +28,7 @@ import {
    LoadContainer,
    Photo,
    Title,
+   TitleElementosFiltro,
    Transaction,
    TransactionList,
    User,
@@ -50,17 +57,42 @@ export function Home() {
    const [data, setData] = useState<DataLIstProps[]>([]);
    const [highligh, setHighligh] = useState<HighLighData>({} as HighLighData);
    const [typeSelect, setTypeSelect] = useState("mes");
+   const [image, setImage] = useState("");
 
    const dataKey = "@finance:transactions";
+   const imageKey = "@image:finace";
 
+   const Imagae = useCallback(async () => {
+      const result = await ImagePiker.launchImageLibraryAsync({
+         mediaTypes: ImagePiker.MediaTypeOptions.All,
+         allowsEditing: true,
+         aspect: [6, 6],
+         quality: 1,
+      });
+
+      if (!result.cancelled) {
+         setImage(result.uri);
+         await AsyncStorage.setItem(imageKey, JSON.stringify(result.uri));
+      }
+   }, []);
+
+   useEffect(() => {
+      async function storege() {
+         const res = await AsyncStorage.getItem(imageKey);
+         console.log(res);
+         setImage(res ? JSON.parse(res) : "");
+      }
+      storege();
+   }, []);
    const handleSelect = useCallback((type: string) => {
       setTypeSelect(type);
    }, []);
 
    const Load = useCallback(() => {
+      const a = 160550.5;
       async function load() {
-         let entriesTotal = 0;
-         let exensiveTotal = 0;
+         const entriesTotal = 0;
+         const exensiveTotal = 0;
          const response = await Storage.getItem(dataKey);
 
          const transacton = response ? JSON.parse(response) : [];
@@ -107,41 +139,36 @@ export function Home() {
                }
             });
 
-         const dataFilter = formatedd.filter((h) => {
-            const [dia, mes, ano] = h.date.split("/").map(Number);
-            const dataN = new Date(Date.now());
+         const EntriesTotal = formatedd
+            .filter((h) => {
+               console.log(h.amount);
+               return h.type === "positivo";
+            })
+            .reduce((acc, item) => {
+               return acc + Number(item.value);
+            }, 0);
 
-            if (
-               (typeSelect === "ano" && ano === dataN.getFullYear()) ||
-               (typeSelect === "mes" && mes === dataN.getMonth() + 1) ||
-               typeSelect === "todos"
-            ) {
-               return h;
-            }
-         });
-
-         const soma = dataFilter.map((h) => {
-            if (h.type === "positivo") {
-               entriesTotal += Number(h.value);
-            } else {
-               exensiveTotal += Number(h.value);
-            }
-
-            return h;
-         });
+         const ExpensiveTotal = formatedd
+            .filter((h) => {
+               console.log(h.amount);
+               return h.type === "negativo";
+            })
+            .reduce((acc, item) => {
+               return acc + Number(item.value);
+            }, 0);
 
          setData(formatedd);
 
-         const tot = entriesTotal - exensiveTotal;
+         const tot = EntriesTotal - ExpensiveTotal;
          setHighligh({
             entries: {
-               amount: entriesTotal.toLocaleString("pt-BR", {
+               amount: EntriesTotal.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                }),
             },
             expensives: {
-               amount: exensiveTotal.toLocaleString("pt-BR", {
+               amount: ExpensiveTotal.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                }),
@@ -156,7 +183,9 @@ export function Home() {
          setLoading(false);
       }
 
-      load();
+      setTimeout(() => {
+         load();
+      }, 1500);
    }, [typeSelect]);
 
    useEffect(() => {
@@ -172,22 +201,20 @@ export function Home() {
    return (
       <Container>
          {isLoading ? (
-            <LoadContainer>
-               <ActivityIndicator color="red" size="small" />
-            </LoadContainer>
+            <Loading />
          ) : (
             <>
                <Header>
                   <UserWrapper>
-                     <UserInfo>
+                     <UserInfo onPress={Imagae}>
                         <Photo
                            source={{
-                              uri: "https://i1.wp.com/sempreupdate.com.br/wp-content/uploads/2020/01/kali-linux.png?resize=728%2C455&ssl=1",
+                              uri: image,
                            }}
                         />
                         <User>
                            <UserGreeting>Olá</UserGreeting>
-                           <UserName>William</UserName>
+                           <UserName />
                         </User>
                      </UserInfo>
                      <Icon name="power" />
@@ -218,7 +245,7 @@ export function Home() {
                </HighlightCards>
 
                <Transaction>
-                  <Title>Listagem</Title>
+                  <Title>Extrato</Title>
                   <FiltroDataContainer>
                      <ElementosFiltroContainer
                         onPress={() => {
@@ -226,7 +253,7 @@ export function Home() {
                         }}
                         select={typeSelect === "mes"}
                      >
-                        <Title>MES</Title>
+                        <TitleElementosFiltro>MES</TitleElementosFiltro>
                      </ElementosFiltroContainer>
 
                      <ElementosFiltroContainer
@@ -235,7 +262,7 @@ export function Home() {
                         }}
                         select={typeSelect === "ano"}
                      >
-                        <Title>ANO</Title>
+                        <TitleElementosFiltro>ANO</TitleElementosFiltro>
                      </ElementosFiltroContainer>
 
                      <ElementosFiltroContainer
@@ -244,10 +271,11 @@ export function Home() {
                         }}
                         select={typeSelect === "todos"}
                      >
-                        <Title>TODOS</Title>
+                        <TitleElementosFiltro>TODOS</TitleElementosFiltro>
                      </ElementosFiltroContainer>
                   </FiltroDataContainer>
                   <TransactionList
+                     contentContainerStyle={{ paddingBottom: 40 }}
                      data={data}
                      keyExtractor={(item) => item.id}
                      renderItem={({ item }) => <TransactionCards data={item} />}

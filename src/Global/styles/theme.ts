@@ -1,18 +1,19 @@
 export default {
    colors: {
-      primary: "#5646d3",
-      primary_light: "rgba(56, 46, 156, 0.4)",
-      secondary: "#ff872c",
-      secondary_light: "rgba(255, 135, 44, 0.3)",
-      succes: "#12a454",
+      primary: "#rgba(30, 36, 51, 1)",
+      primary_light: "rgba(30, 36, 51, 0.4)",
+      secondary: "rgba(156, 196, 202, 1)",
+      secondary_light: "rgba(156, 196, 202, 0.4)",
+      succes: "rgba(148, 214, 187, 1)",
       cucces_light: "rgba(18, 164, 84, 0.5)",
 
-      attention: "#e83f5b",
+      attention: "rgba(158, 65, 50, 1)",
       attention_light: "rgba(232, 63, 91, 0.5)",
 
       shape: "#ffffff",
       title: "#363f5f",
-      text: "#969cb2",
+      text: "rgba(30, 36, 51, 1)",
+      text_light: "rgba(30, 36, 51, 0.4)",
       text_dark: "#000000",
       background: "#f0f2f5",
    },
