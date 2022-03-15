@@ -4,7 +4,7 @@
   "expo": {
     "name": "Go_finance",
     "slug": "Go_finance",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -16,7 +16,24 @@
     "icon": "./assets/icon.png",
 
     "android": {
-      "package": "com.appc.Go_finance"
+      "package": "com.appc.Go_finance",
+      "versionCode": 2,
+      "permissions": [
+         "android.permission.CAMERA",
+         "android.permission.READ_EXTERNAL_STORAGE",
+         "android.permission.WRITE_EXTERNAL_STORAGE",
+         "android.permission.RECORD_AUDIO"
+       ]
+    },
+
+    "ios": {
+      "infoPlist": {
+         "NSPhotoLibraryUsageDescription": "The app accesses your photos to let you share them with your friends.",
+         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+       },
+      "bundleIdentifier": "com.app-c.orcamento",
+      "buildNumber": "2"
     }
   }
 }
